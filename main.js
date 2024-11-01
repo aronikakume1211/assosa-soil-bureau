@@ -1,30 +1,37 @@
-const { app, BrowserWindow } = require('electron/main')
-const path = require('node:path')
+const { app, BrowserWindow, screen } = require("electron");
+const path = require("path");
 
-function createWindow () {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+let win;
+
+function createWindow() {
+  // Get the primary screen’s dimensions
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  // Set window size based on the screen size (e.g., 80% of screen size)
+  win = new BrowserWindow({
+    width: Math.floor(width),
+    height: Math.floor(height),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+      nodeIntegration: true,
+    },
+  });
 
-  win.loadFile('index.html')
+  win.setMenuBarVisibility(false);
+
+  win.loadURL(`file://${path.join(__dirname, "dist/index.html")}`);
+
+  win.once("ready-to-show", () => {
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    console.log(`Window dimensions: ${width}x${height}`);
+  });
 }
 
-app.whenReady().then(() => {
-  createWindow()
+app.whenReady().then(createWindow);
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
