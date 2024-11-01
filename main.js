@@ -26,10 +26,11 @@ function createWindow() {
     console.log(`Window dimensions: ${width}x${height}`);
   });
 }
+// Set up auto-update event listeners
+function initializeAutoUpdater() {
+  // Start checking for updates immediately
+  autoUpdater.checkForUpdatesAndNotify();
 
-app.whenReady().then(() => {
-  createWindow();
-  // Set up auto-updater event handlers
   autoUpdater.on("update-available", () => {
     dialog.showMessageBox({
       type: "info",
@@ -43,7 +44,8 @@ app.whenReady().then(() => {
       .showMessageBox({
         type: "info",
         title: "Update Ready",
-        message: "Install and restart now?",
+        message:
+          "A new version has been downloaded. Would you like to install it now?",
         buttons: ["Restart", "Later"],
       })
       .then((result) => {
@@ -52,11 +54,13 @@ app.whenReady().then(() => {
   });
 
   autoUpdater.on("error", (err) => {
-    dialog.showErrorBox(
-      "Error: ",
-      err == null ? "unknown" : (err.stack || err).toString()
-    );
+    dialog.showErrorBox("Update Error", err ? err.message : "Unknown error");
   });
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  initializeAutoUpdater(); // Initialize auto-updater after window creation
 });
 
 app.on("window-all-closed", () => {

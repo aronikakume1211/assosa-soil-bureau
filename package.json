@@ -1,6 +1,6 @@
 {
   "name": "soil-bureau",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Soil & Resource Managment bureau application",
   "main": "main.js",
   "repository": {
@@ -40,7 +40,7 @@
       {
         "provider": "github",
         "owner": "aronikakume1211",
-        "repo": "https://github.com/aronikakume1211/assosa-soil-bureau"
+        "repo": "assosa-soil-bureau"
       }
     ],
     "appId": "com.example.soil",
