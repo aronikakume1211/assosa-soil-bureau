@@ -1,6 +1,6 @@
 {
   "name": "soil-bureau",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Soil & Resource Managment bureau application",
   "main": "main.js",
   "repository": {
